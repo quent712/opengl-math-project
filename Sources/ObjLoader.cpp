@@ -4,48 +4,82 @@
 
 #include "../Headers/ObjLoader.h"
 
-void ObjLoader::load_obj() const{
+void ObjLoader::load_obj() const {
 
-    std::ifstream file(this->filename);
-    std::string line;
-    std::istringstream contentLine;
-    while(std::getline(file, line)) {
-        if (line.substr(0,2) == "v ") {
-            contentLine.str(line.substr(2));
-            glm::vec4 v;
-            contentLine >> v.x;
-            contentLine >> v.y;
-            contentLine >> v.z;
-            v.w = 1.0f;
-            this->data->vertices.push_back(v);
-        } else if (line.substr(0,2) == "f ") {
-            contentLine.str(line.substr(2));
-            GLushort a,b,c;
-            contentLine >> a;
-            contentLine >> b;
-            contentLine >> c;
-            a--; b--; c--;
-            this->data->elements.push_back(a);
-            this->data->elements.push_back(b);
-            this->data->elements.push_back(c);
+    FILE *file = fopen(this->filename, "rb");
+
+    if (file == nullptr) {
+        printf("Error happened when tried to open this file...");
+        fclose(file);
+        return;
+    }
+
+    while (true) {
+
+        char line[1024];
+
+        int res = fscanf(file, "%s", line);
+
+        if (res == EOF) {
+            fclose(file);
+            break;
         }
-        contentLine.clear();
+
+        if (strcmp(line, "v") == 0) {
+            glm::vec3 vertex;
+            fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+            this->data->vertices.push_back(vertex);
+        } else if (strcmp(line, "vt") == 0) {
+            glm::vec2 uv;
+            fscanf(file, "%f %f %f\n", &uv.x, &uv.y);
+            this->data->uvs.push_back(uv);
+        } else if (strcmp(line, "vn") == 0) {
+            glm::vec3 normal;
+            fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
+            this->data->normals.push_back(normal);
+        } else if (strcmp(line, "f") == 0) {
+
+//            std::string vertex1, vertex2, vertex3, vertex4;
+//            float vertexIndex[3], uvIndex[3], normalIndex[3];
+//
+//            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d %d/%d/%d\n",
+//                                 &vertexIndex[0], &uvIndex[0], &normalIndex[0],
+//                                 &vertexIndex[1], &uvIndex[1], &normalIndex[1],
+//                                 &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
+////                                 &vertexIndex[3], &uvIndex[3], &normalIndex[3]);
+//
+//            printf("%d matches \n", matches);
+//            printf("%d %d %d \n", vertexIndex[0], uvIndex[0], normalIndex[0]);
+//            printf("%d %d %d \n", vertexIndex[1], uvIndex[1], normalIndex[1]);
+//            printf("%d %d %d \n", vertexIndex[2], uvIndex[2], normalIndex[2]);
+//            if (matches != 12 && matches != 9) {
+//                printf("This file cannot be read by this loader...");
+//                return;
+//            }
+//
+//            this->data->vertexIndices.push_back(vertexIndex[0]);
+//            this->data->vertexIndices.push_back(vertexIndex[1]);
+//            this->data->vertexIndices.push_back(vertexIndex[2]);
+//            this->data->uvIndices.push_back(uvIndex[0]);
+//            this->data->uvIndices.push_back(uvIndex[1]);
+//            this->data->uvIndices.push_back(uvIndex[2]);
+//            this->data->normalIndices.push_back(normalIndex[0]);
+//            this->data->normalIndices.push_back(normalIndex[1]);
+//            this->data->normalIndices.push_back(normalIndex[2]);
+//²
+//            if (matches == 12) {
+//                this->data->vertexIndices.push_back(vertexIndex[0]);
+//                this->data->vertexIndices.push_back(vertexIndex[2]);
+//                this->data->vertexIndices.push_back(vertexIndex[3]);
+//                this->data->uvIndices.push_back(uvIndex[0]);
+//                this->data->uvIndices.push_back(uvIndex[2]);
+//                this->data->uvIndices.push_back(uvIndex[3]);
+//                this->data->normalIndices.push_back(normalIndex[0]);
+//                this->data->normalIndices.push_back(normalIndex[2]);
+//                this->data->normalIndices.push_back(normalIndex[3]);
+//            }
+        }
     }
 
-    this->data->normals.resize(this->data->vertices.size(), glm::vec3(0.0, 0.0, 0.0));
-
-    for (int i = 0; i < this->data->elements.size(); i++)
-    {
-        GLushort ia = this->data->elements[i];
-        GLushort ib = this->data->elements[i+1];
-        GLushort ic = this->data->elements[i+2];
-
-        glm::vec3 normal = glm::normalize(glm::cross(
-                glm::vec3(this->data->vertices[ib]) - glm::vec3(this->data->vertices[ia]),
-                glm::vec3(this->data->vertices[ic]) - glm::vec3(this->data->vertices[ia])
-                ));
-
-        this->data->normals[ia] = this->data->normals[ic] = this->data->normals[ib] = normal;
-    }
+    fclose(file);
 }
-

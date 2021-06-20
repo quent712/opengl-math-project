@@ -3,7 +3,6 @@
 
 CMakeFiles/Dragon3D.dir/Dragon3DLight.cpp.obj: ../glew/include/glew.h
 CMakeFiles/Dragon3D.dir/Dragon3DLight.cpp.obj: ../Dragon3DLight.cpp
-CMakeFiles/Dragon3D.dir/Dragon3DLight.cpp.obj: ../DragonData.h
 CMakeFiles/Dragon3D.dir/Dragon3DLight.cpp.obj: ../GLFW/include/glfw3.h
 CMakeFiles/Dragon3D.dir/Dragon3DLight.cpp.obj: ../GLShader.h
 CMakeFiles/Dragon3D.dir/Dragon3DLight.cpp.obj: ../Headers/Camera.h

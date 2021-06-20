@@ -5,6 +5,7 @@
 #ifndef OPENGL_PROJECT_OBJLOADER_H
 #define OPENGL_PROJECT_OBJLOADER_H
 
+#include <cstring>
 #include <vector>
 #include <iostream>
 #include <string>
@@ -18,14 +19,17 @@
 #include "./glm/vec4.hpp"
 
 typedef struct DataObj {
+    std::vector< unsigned int> vertexIndices;
+    std::vector< unsigned int> uvIndices;
+    std::vector< unsigned int> normalIndices;
     std::vector<glm::vec3> normals;
-    std::vector<GLushort> elements;
-    std::vector<glm::vec4> vertices;
+    std::vector<glm::vec2> uvs;
+    std::vector<glm::vec3> vertices;
 } DataObj;
 
 class ObjLoader {
 public:
-    ObjLoader(std::string filename) : filename(filename)
+    ObjLoader(const char *filename) : filename(filename)
     {
         this->data = new DataObj();
     };
@@ -33,7 +37,7 @@ public:
 
     DataObj *data;
 
-    std::string filename;
+    const char * filename;
 };
 
 
