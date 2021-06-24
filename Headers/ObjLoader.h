@@ -10,7 +10,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-#include <glew.h>
+#include "../glew/include/glew.h"
 #include <list>
 
 #include "./glm/glm.hpp"
