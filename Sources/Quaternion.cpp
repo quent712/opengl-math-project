@@ -70,7 +70,7 @@ Quaternion sq = MatrixtaQuaternion(mat);
 return (this.x * sq.x + this.y * sq.y + this.z * sq.z + this.w * sq.w);
 }
 
-//Matrice to a Quaternion
+//Matrix to a Quaternion
 Quaternion MatrixtoQuaternion(const glm::mat4 *src){	const float trace = 1.0f + src->m00 + src->m11 + src->m22;	
 if (trace > 0.00001f)	{		
     const float s = sqrt(trace) * 2;		
